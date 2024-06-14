@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IT-130: Final Exam Project</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet"
+          href="final_exam_styles.css">
+</head>
+<body class="page-style">
+    <header>
+    <img class="picture-format" src="pizza_slice.png" alt="Picture of pizza slice">
+    <h1>Pizza Ordering Page</h1>
+    </header>
+    <main>
+    <form id="orderPizza">
+        <p><label for="txtName">Name:</label>
+            <input type="text" id="txtName"></p>
+        <p><label for="txtPhoneNumb">Phone Number:</label>
+            <input type="text" id="txtPhoneNumb"></p>
+    <h2>Size</h2>
+        <p><label for="selPizzaSize">Which size pizza would you like to order?</label>
+            <select id="selPizzaSize">
+                <option value="12">Small ($12)</option>
+                <option value="15">Medium ($15)</option>
+                <option value="18">Large ($18)</option>
+            </select></p>
+    <h2>Toppings ($2.25 each)</h2>
+        <p><label for="chkMush">Mushrooms:</label>
+                <input type="checkbox" id="chkMush"><br>
+           <label for="chkPepper">Pepperoni:</label>
+                <input type="checkbox" id="chkPepper"><br>
+           <label for="chkSaus">Sausage:</label>
+                <input type="checkbox" id="chkSaus"></p>
+    <h2>Club Member?</h2>
+        <label for="chkMember">If you are a club member, you will be given an additional 5% off of every order you make with us. Check this box to join:</label>
+            <input type="checkbox" id="chkMember">
+    <h2>Discount Lottery!</h2>
+        <p>When you order today, a random discount will be applied to your order! Please note that only one discount attempt can be made per email address per day.</p>
+        
+        <p><button type="button" onclick="pizzaSummary()">Make My Pizza!</button></p>
+    </form>
+        
+<div id="results">
+    </div> <!-- end of results div -->
+   
+    <script>
+        function pizzaSummary()
+        {
+            var name = document.getElementById("txtName").value;
+            var pizzaCost = document.getElementById("selPizzaSize").value;
+            var pizzaSize, toppings;
+            var cost = 0;
+            var clubMember, giveCongrats;
+            var allDiscount = (Math.random()*3) + 1;
+            allDiscount = parseInt(allDiscount);
+            // Need to parse the random numbers so they don't 
+            // have decimals and thus, can function better in their if/else if.
+            var summaryString;
+            
+            if (pizzaCost == 12)
+            {
+                cost = 12;
+                pizzaSize = "small";
+            }
+            else if (pizzaCost == 15)
+            {
+                cost = 15;
+                pizzaSize = "medium";
+            }
+            else if (pizzaCost == 18)
+            {
+                cost = 18;
+                pizzaSize = "large";
+            }
+            // By combining the cost of the pizza and its size,
+            // there is less code needed to be read.
+            
+            if (document.getElementById("chkMush").checked && document.getElementById("chkPepper").checked && document.getElementById("chkSaus").checked) 
+            {
+                cost = cost + 2.25 * 3;
+                toppings = "Mushrooms, Pepperoni, and Sausage";
+            }
+            else if (document.getElementById("chkMush").checked && document.getElementById("chkPepper").checked)
+            {
+                cost = cost + 2.25 * 2;
+                toppings = "Mushrooms and Sausage";
+            }
+            else if (document.getElementById("chkPepper").checked && document.getElementById("chkSaus").checked)
+            {
+                cost = cost + 2.25 * 2;
+                toppings = "Pepperoni and Sausage";
+            }
+            else if (document.getElementById("chkMush").checked && document.getElementById("chkSaus").checked)
+            {
+                cost = cost + 2.25 * 2;
+                toppings = "Mushrooms and Sausage";
+            }
+            else if (document.getElementById("chkMush").checked)
+            {
+                cost = cost + 2.25;
+                toppings = "Mushrooms";
+            }
+            else if (document.getElementById("chkPepper").checked)
+            {
+                cost = cost + 2.25;
+                toppings = "Pepperoni";
+            }
+            else if (document.getElementById("chkSaus").checked)
+            {
+                cost = cost + 2.25;
+                toppings = "Sausage";
+            }
+            else
+            {
+                toppings = "None";
+            }
+            // In order to correctly output the right topping and price, 
+            // if/else if statments are needed for each option.
+
+            if (document.getElementById("chkMember").checked)
+            {
+                clubMember = "Yes";
+                cost = cost - (cost * .05);
+            }
+            else
+            {
+                clubMember = "No";
+            }
+            // If the customer checked the club member box, they will get a 5% discount.
+            
+            if (allDiscount == 1)
+            {
+                giveCongrats = " Congratulations, you won a 10% discount!";
+                cost = cost * .90;
+            }
+            else if (allDiscount == 2)
+            {
+                giveCongrats = " Congratulations, you won a 20% discount!";
+                cost = cost * .80;
+            }
+            else if (allDiscount == 3)
+            {
+                giveCongrats = " Congratulations, you won a 30% discount!";
+                cost = cost * .70;
+            }
+            cost = cost.toFixed(2);
+            // A random number and its appropriate discount will be picked and 
+            // applied to the customer's total.
+            
+            summaryString = "<p>Thank you, " + name + " for your order of a " + pizzaSize
+                + " pizza!<br> The toppings you requested are: " + toppings
+                + "<p>Join the club? " + clubMember + "<br>Discount? " + giveCongrats
+                + "<p>The total cost of your pizza is: $" + cost + ". See you soon!";
+            
+            document.getElementById("results").innerHTML = summaryString;
+        }
+    </script>
+    </main>
+</body>
+</html>
